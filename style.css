@@ -63,8 +63,7 @@ img {
   left: 0;
   right: 0;
   height: var(--nav-height);
-  background-color: var(--base);
-  border-bottom: 1px solid var(--border);
+  background-color: var(--cobalt);
   z-index: 100;
   display: flex;
   align-items: center;
@@ -85,7 +84,7 @@ img {
   font-family: var(--font-sans);
   font-size: 0.75rem;
   font-weight: 500;
-  color: var(--ink);
+  color: rgba(255, 255, 255, 0.75);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   padding-bottom: 3px;
@@ -94,13 +93,13 @@ img {
 }
 
 .nav-links a:hover {
-  color: var(--cobalt);
-  border-bottom-color: var(--cobalt);
+  color: var(--white);
+  border-bottom-color: var(--white);
 }
 
 .nav-links a.active {
-  color: var(--cobalt);
-  border-bottom-color: var(--cobalt);
+  color: var(--white);
+  border-bottom-color: var(--red);
 }
 
 /* ============================================================
@@ -140,7 +139,7 @@ img {
    ============================================================ */
 .marquee-strip {
   overflow: hidden;
-  background-color: var(--ink);
+  background-color: var(--red);
   padding: 10px 0;
   flex-shrink: 0;
   width: 100%;
@@ -206,11 +205,35 @@ img {
 .home-statement {
   font-family: var(--font-display);
   font-size: clamp(1.65rem, 4.2vw, 3rem);
-  color: var(--ink);
+  color: var(--cobalt);
   font-weight: 800;
   line-height: 1.15;
   letter-spacing: -0.025em;
   max-width: 700px;
+}
+
+.page-title-red  { color: var(--red); }
+.page-title-blue { color: var(--cobalt); }
+
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--white);
+  background-color: var(--cobalt);
+  border: 2px solid var(--cobalt);
+  padding: 11px 22px;
+  margin-top: 8px;
+  transition: background-color 0.15s, border-color 0.15s;
+}
+
+.hero-cta:hover {
+  background-color: var(--red);
+  border-color: var(--red);
 }
 
 .home-since {
@@ -251,7 +274,7 @@ img {
 }
 
 .home-carousel .carousel-viewport {
-  width: min(260px, 38vw);
+  width: min(340px, 44vw);
   aspect-ratio: 3 / 4;
 }
 
@@ -604,11 +627,13 @@ img {
 .work-panel-name {
   font-family: var(--font-display);
   font-size: 1.7rem;
-  color: var(--ink);
   font-weight: 800;
   line-height: 1.15;
   letter-spacing: -0.02em;
 }
+
+.work-panel:nth-child(odd)  .work-panel-name { color: var(--cobalt); }
+.work-panel:nth-child(even) .work-panel-name { color: var(--red); }
 
 .work-panel-header-right {
   display: flex;
@@ -770,6 +795,7 @@ img {
 .carousel-track {
   display: flex;
   height: 100%;
+  width: 100%;
   transition: transform 0.3s ease;
 }
 
@@ -1063,6 +1089,27 @@ img {
   border: 1px solid var(--border);
 }
 
+.connect-projects {
+  display: flex;
+  gap: 24px;
+  margin-top: 52px;
+}
+
+.connect-project {
+  flex: 1;
+  min-width: 0;
+}
+
+.connect-project-label {
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--red);
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
 /* ============================================================
    RESPONSIVE
    ============================================================ */
@@ -1178,6 +1225,10 @@ img {
 
   .connect-link-label {
     min-width: unset;
+  }
+
+  .connect-projects {
+    flex-direction: column;
   }
 
   .landing-wrap {

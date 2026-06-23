@@ -63,13 +63,18 @@
 
     function goTo(index) {
       current = index;
-      track.style.transform = 'translateX(-' + (100 * current) + '%)';
+      var vpWidth = track.parentElement.offsetWidth || track.parentElement.getBoundingClientRect().width;
+      track.style.transform = vpWidth
+        ? 'translateX(-' + (vpWidth * current) + 'px)'
+        : 'translateX(-' + (100 * current) + '%)';
       prevBtn.disabled = current === 0;
       nextBtn.disabled = current === total - 1;
       dotsEl.querySelectorAll('.carousel-dot').forEach(function (d, i) {
         d.classList.toggle('active', i === current);
       });
     }
+
+    carousel.addEventListener('carousel-refresh', function () { goTo(current); });
 
     prevBtn.addEventListener('click', function () {
       if (current > 0) goTo(current - 1);
@@ -118,6 +123,11 @@
       if (!isOpen) {
         panel.classList.add('is-open');
         header.setAttribute('aria-expanded', 'true');
+        setTimeout(function () {
+          panel.querySelectorAll('.work-carousel').forEach(function (c) {
+            c.dispatchEvent(new Event('carousel-refresh'));
+          });
+        }, 460);
       }
     });
 
