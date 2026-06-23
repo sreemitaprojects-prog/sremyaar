@@ -28,6 +28,63 @@
 
 
 /* ============================================================
+   WORK CAROUSELS
+   Only runs on work.html (looks for .work-carousel).
+   ============================================================ */
+(function initCarousels() {
+  var carousels = document.querySelectorAll('.work-carousel, .home-carousel');
+  if (!carousels.length) return;
+
+  carousels.forEach(function (carousel) {
+    var track   = carousel.querySelector('.carousel-track');
+    var images  = track.querySelectorAll('img');
+    var prevBtn = carousel.querySelector('.carousel-prev');
+    var nextBtn = carousel.querySelector('.carousel-next');
+    var dotsEl  = carousel.querySelector('.carousel-dots');
+    var ui      = carousel.querySelector('.carousel-ui');
+    var total   = images.length;
+    var current = 0;
+
+    if (total <= 1) {
+      if (ui) ui.style.display = 'none';
+      return;
+    }
+
+    for (var i = 0; i < total; i++) {
+      var dot = document.createElement('button');
+      dot.className = 'carousel-dot';
+      dot.setAttribute('aria-label', 'Go to image ' + (i + 1));
+      dot.dataset.index = i;
+      dot.addEventListener('click', function () {
+        goTo(parseInt(this.dataset.index));
+      });
+      dotsEl.appendChild(dot);
+    }
+
+    function goTo(index) {
+      current = index;
+      track.style.transform = 'translateX(-' + (100 * current) + '%)';
+      prevBtn.disabled = current === 0;
+      nextBtn.disabled = current === total - 1;
+      dotsEl.querySelectorAll('.carousel-dot').forEach(function (d, i) {
+        d.classList.toggle('active', i === current);
+      });
+    }
+
+    prevBtn.addEventListener('click', function () {
+      if (current > 0) goTo(current - 1);
+    });
+
+    nextBtn.addEventListener('click', function () {
+      if (current < total - 1) goTo(current + 1);
+    });
+
+    goTo(0);
+  });
+})();
+
+
+/* ============================================================
    FLIPBOOK
    Only runs on writing.html (looks for .flipbook-wrapper).
 
@@ -57,7 +114,63 @@
     {
       content:
         '<p class="book-piece-title">list of things i\'d put into a time capsule if i was still 17</p>' +
-        '<p>[Paste the text of this piece here. Split into more page objects below if the text is long.]</p>'
+        '<p>Begin with the stuff you lose last –<br>' +
+        'Photographs, uniforms, the yearbook,<br>' +
+        'Badges, school shoes, the handwritten letters with<br>' +
+        'promises too big to fit in the palm of our hands.<br>' +
+        'Your long hair, your belief in yourself, the smell<br>' +
+        'Of summer — these are things that existed as extensions of your being,<br>' +
+        'like leaves hanging off a tree.<br>' +
+        'but then, winter came and they shed, and the wind.<br>' +
+        'well, the wind blew them away to some other place,<br>' +
+        'you can no longer come home to, blew it away to<br>' +
+        'some other time and you stayed rooted to your place.</p>'
+    },
+    /* -- 2b -- */
+    {
+      content:
+        '<p class="book-piece-title">list of things i\'d put into a time capsule if i was still 17</p>' +
+        '<p>Put in your softness next. The able-bodied sweetness<br>' +
+        'you had beat to death the second you had run far enough to catch your breath.<br>' +
+        'Materialise the bloom in your heart,<br>' +
+        'the lust for all your coming winters,<br>' +
+        'The want to dive in without knowing what surface awaits,<br>' +
+        'Make them into charms adorning anklets to weigh you down,<br>' +
+        'And pack them in with a bow stained with blood, hope and the<br>' +
+        'Morbid thirst for happiness, place it beside your dreams<br>' +
+        'And let it stay alive for longer than it actually did.</p>'
+    },
+    /* -- 2c -- */
+    {
+      content:
+        '<p class="book-piece-title">list of things i\'d put into a time capsule if i was still 17</p>' +
+        '<p>At some point, after you\'ve wept hard enough for the child you used to be,<br>' +
+        'pack in the things you lose first:<br>' +
+        'The bright, kind memories of all the people who have evaporated since.<br>' +
+        'Grandmothers, parents of friends whose casket you lifted,<br>' +
+        'Lovers you promised to meet again when you\'re looking for<br>' +
+        'quiet mornings and soft forevers, sisters who have tread<br>' +
+        'their fingers through your soul and the chosen parts of you to immortalise.<br>' +
+        'The forgiving, doting moments of your parents,<br>' +
+        'Droplets of peace in an otherwise burning youth.</p>' +
+        '<p>Make sure to forget your anger, don\'t pack it in,<br>' +
+        'It follows you everywhere nonetheless,<br>' +
+        'You will forever run from it regardless.</p>'
+    },
+    /* -- 2d -- */
+    {
+      content:
+        '<p class="book-piece-title">list of things i\'d put into a time capsule if i was still 17</p>' +
+        '<p>Instead, put in dirt from the land that raised you.<br>' +
+        'Because the stench of everything that has happened<br>' +
+        'has been scrubbed off your face, arms and knees,<br>' +
+        'but it can never be washed away from under your nails.<br>' +
+        'So, they permeate every surface you touch, the food you eat,<br>' +
+        'The destiny you lead. You bleed of the dirt you grew out of,<br>' +
+        'But you can never return to it. Not yet at least.<br>' +
+        'Tell yourself to put in dirt, so years later,<br>' +
+        'You can dig your hands into the earth that birthed you,<br>' +
+        'and know that you once had a home.</p>'
     },
 
     /* -- 3 -- */
@@ -69,7 +182,13 @@
     {
       content:
         '<p class="book-piece-title">english language paper</p>' +
-        '<p>[Paste the text of this piece here.]</p>'
+        '<p>I had this very morbid habit of killing off my grandmother in essays for my English Language test. It just seemed easy to arouse emotion in the reader that way, and since my teachers would change every year, there was thankfully no one to question how she died in very horrifying ways for 5 years straight. I made her read one such essay, where she died rather mundanely, in her sleep, because this was the first of these essays in Bengali, and I didn\'t possess the vocabulary to make it any more complicated than that. Back then, I hadn\'t understood what absence truly meant. I was the absent one all my life, choosing to step away and feel at a later convenience. She had laughed and told me, “You gave me a kind death.” I didn\'t think death was kind at all. I still don\'t. My grandmother died of organ failure, offset by a particularly nasty fall in the bathroom, which saw her break her hip.</p>'
+    },
+    /* -- 4b -- */
+    {
+      content:
+        '<p class="book-piece-title">english language paper</p>' +
+        '<p>She died surrounded by family, but I wasn\'t there to hold her hand when she left. In many ways, I am who I am because of her. Her stories shaped my morality, my understanding of the world. I may pretend to hate everything that tethers me to home, but I could never refuse the prawn curry she would make. The books she would read out to me, the songs she would sing to me, with me, while braiding my hair. I will never be untethered from the ends of her saree, which I would pull over my face while I slept with my head over her lap. The stoicism I showed to the outside world would crumble before her, but there was no more left of her to accept my undoing. So I wept alone on her bed that night, and the day after, and mourned that life was long and that I didn\'t believe in God, so those few years would have to be enough for all eternity.</p>'
     },
 
     /* -- 5 -- */
