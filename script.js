@@ -370,9 +370,12 @@
       rightPage.style.display = 'block';
       leftPage.classList.add('page-left');
 
-      leftPage.innerHTML  = pages[currentIndex] ? pages[currentIndex].content : '';
-      rightPage.innerHTML =
-        currentIndex + 1 < total ? pages[currentIndex + 1].content : '';
+      leftPage.innerHTML  = pages[currentIndex]
+        ? pages[currentIndex].content + '<span class="book-page-num">' + (currentIndex + 1) + '</span>'
+        : '';
+      rightPage.innerHTML = currentIndex + 1 < total
+        ? pages[currentIndex + 1].content + '<span class="book-page-num">' + (currentIndex + 2) + '</span>'
+        : '';
 
       counter.textContent = (currentIndex + 1) + ' / ' + total;
       prevBtn.disabled = currentIndex <= 0;
@@ -383,7 +386,9 @@
       rightPage.style.display = 'none';
       leftPage.classList.remove('page-left'); /* no spine border on mobile */
 
-      leftPage.innerHTML = pages[currentIndex] ? pages[currentIndex].content : '';
+      leftPage.innerHTML = pages[currentIndex]
+        ? pages[currentIndex].content + '<span class="book-page-num">' + (currentIndex + 1) + '</span>'
+        : '';
 
       counter.textContent = (currentIndex + 1) + ' / ' + total;
       prevBtn.disabled = currentIndex <= 0;

@@ -10,11 +10,11 @@
   --cobalt: #1A4FFF;
   --red:    #E8192C;
   --ink:    #111111;
-  --base:   #F7F6F2;
+  --base:   #FFFFFF;
   --white:  #FFFFFF;
-  --border: rgba(17, 17, 17, 0.10);
+  --border: rgba(26, 79, 255, 0.14);
 
-  --font-display: 'Syne', sans-serif;
+  --font-display: 'Poppins', sans-serif;
   --font-sans:    'DM Sans', system-ui, sans-serif;
 
   --nav-height: 56px;
@@ -546,8 +546,8 @@ img {
   font-family: var(--font-sans);
   font-size: 0.85rem;
   font-style: italic;
-  color: var(--ink);
-  opacity: 0.35;
+  color: var(--cobalt);
+  opacity: 0.5;
   margin-top: 56px;
 }
 
@@ -860,7 +860,7 @@ img {
 }
 
 .book-page {
-  background-color: var(--white);
+  background-color: #FEFDFB;
   padding: 56px 48px;
   min-height: 560px;
   font-family: var(--font-sans);
@@ -868,6 +868,7 @@ img {
   line-height: 1.95;
   color: var(--ink);
   flex: 1;
+  position: relative;
 }
 
 .book-page.page-left {
@@ -876,12 +877,15 @@ img {
 
 .book-piece-title {
   font-family: var(--font-display);
-  font-size: 0.9rem;
-  color: var(--ink);
-  letter-spacing: 0.02em;
-  margin-bottom: 24px;
+  font-size: 0.85rem;
+  color: var(--red);
+  letter-spacing: 0.04em;
+  margin-bottom: 0;
   font-weight: 700;
   line-height: 1.4;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(232, 25, 44, 0.2);
+  margin-bottom: 20px;
 }
 
 .book-piece-title.title-page {
@@ -890,6 +894,41 @@ img {
   margin-top: 80px;
   margin-bottom: 0;
   line-height: 1.6;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.book-piece-title.title-page::after {
+  content: '';
+  display: block;
+  width: 32px;
+  height: 2px;
+  background: var(--red);
+  margin: 20px auto 0;
+}
+
+/* Drop cap on first paragraph after piece title */
+.book-page .book-piece-title + p::first-letter {
+  font-family: var(--font-display);
+  font-size: 3.4em;
+  font-weight: 800;
+  float: left;
+  line-height: 0.78;
+  margin-right: 0.06em;
+  margin-top: 0.04em;
+  color: var(--red);
+}
+
+/* Page number at bottom of each page */
+.book-page-num {
+  position: absolute;
+  bottom: 22px;
+  right: 48px;
+  font-family: var(--font-sans);
+  font-size: 0.62rem;
+  color: var(--cobalt);
+  opacity: 0.35;
+  letter-spacing: 0.08em;
 }
 
 .book-page p {
@@ -935,8 +974,8 @@ img {
 .flipbook-page-count {
   font-family: var(--font-sans);
   font-size: 0.8rem;
-  color: var(--ink);
-  opacity: 0.35;
+  color: var(--cobalt);
+  opacity: 0.6;
   letter-spacing: 0.05em;
   min-width: 56px;
   text-align: center;
