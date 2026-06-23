@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Writing - sremyaar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- NAVIGATION -->
+  <nav class="site-nav" aria-label="Main navigation">
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="work.html">Work</a></li>
+      <li><a href="writing.html">Writing</a></li>
+      <li><a href="connect.html">Connect</a></li>
+    </ul>
+  </nav>
+
+  <main class="page-content">
+    <div class="writing-page">
+
+      <h1 class="page-title">Writing</h1>
+
+      <!-- FLIPBOOK
+           Desktop: two pages visible side by side, like an open book.
+           Mobile: single page view.
+           Page content is defined in script.js under the `pages` array. -->
+      <section class="flipbook-wrapper" aria-label="Writing flipbook">
+
+        <div class="book-spread" role="document">
+          <div class="book-page page-left" aria-live="polite">
+            <!-- Content rendered by script.js -->
+          </div>
+          <div class="book-page page-right" aria-live="polite">
+            <!-- Content rendered by script.js -->
+          </div>
+        </div>
+
+        <nav class="flipbook-nav" aria-label="Flipbook navigation">
+          <button class="flipbook-arrow prev" aria-label="Previous page" disabled>&#8592;</button>
+          <span class="flipbook-page-count" aria-live="polite">1 / 22</span>
+          <button class="flipbook-arrow next" aria-label="Next page">&#8594;</button>
+        </nav>
+
+      </section>
+
+      <!-- SUBSTACK NOTE -->
+      <p class="substack-line">
+        I also write on
+        <a href="https://substack.com/@sreemita" target="_blank" rel="noopener noreferrer">Substack</a>.
+      </p>
+
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
