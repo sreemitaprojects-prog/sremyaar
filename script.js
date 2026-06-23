@@ -32,7 +32,7 @@
    Only runs on work.html (looks for .work-carousel).
    ============================================================ */
 (function initCarousels() {
-  var carousels = document.querySelectorAll('.work-carousel, .home-carousel');
+  var carousels = document.querySelectorAll('.work-carousel, .home-carousel, .about-carousel');
   if (!carousels.length) return;
 
   carousels.forEach(function (carousel) {
@@ -80,6 +80,53 @@
     });
 
     goTo(0);
+
+    /* Auto-advance every 4s, pause on hover */
+    var autoTimer = setInterval(function () {
+      goTo(current + 1 < total ? current + 1 : 0);
+    }, 4000);
+
+    carousel.addEventListener('mouseenter', function () {
+      clearInterval(autoTimer);
+    });
+    carousel.addEventListener('mouseleave', function () {
+      autoTimer = setInterval(function () {
+        goTo(current + 1 < total ? current + 1 : 0);
+      }, 4000);
+    });
+  });
+})();
+
+
+/* ============================================================
+   WORK PANELS
+   Accordion-style expand/collapse on work.html.
+   ============================================================ */
+(function initWorkPanels() {
+  var headers = document.querySelectorAll('.work-panel-header');
+  if (!headers.length) return;
+
+  headers.forEach(function (header) {
+    header.addEventListener('click', function (e) {
+      if (e.target.closest('.work-entry-link')) return;
+      var panel = header.closest('.work-panel');
+      var isOpen = panel.classList.contains('is-open');
+      document.querySelectorAll('.work-panel.is-open').forEach(function (p) {
+        p.classList.remove('is-open');
+        p.querySelector('.work-panel-header').setAttribute('aria-expanded', 'false');
+      });
+      if (!isOpen) {
+        panel.classList.add('is-open');
+        header.setAttribute('aria-expanded', 'true');
+      }
+    });
+
+    header.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        header.click();
+      }
+    });
   });
 })();
 
