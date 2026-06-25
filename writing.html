@@ -53,7 +53,7 @@
       const QUERY = encodeURIComponent(
         '*[_type == "post"] | order(publishedAt desc) { title, slug, publishedAt, excerpt }'
       );
-      const URL = `https://${PROJECT_ID}.apicdn.sanity.io/v2023-05-03/data/query/${DATASET}?query=${QUERY}`;
+      const URL = `https://${PROJECT_ID}.api.sanity.io/v2023-05-03/data/query/${DATASET}?query=${QUERY}`;
 
       const list = document.getElementById('writing-list');
 
