@@ -29,66 +29,13 @@
     <div class="writing-page">
 
       <h1 class="page-title">writing</h1>
-
       <p class="writing-subtitle">a collection of things written between seventeen and now</p>
 
-      <ol class="writing-index">
-
-        <li class="writing-index-item">
-          <span class="writing-num">01</span>
-          <a class="writing-title-link" href="#" target="_blank" rel="noopener noreferrer">list of things i'd put into a time capsule if i was still 17</a>
+      <ol class="writing-index" id="writing-list">
+        <li class="writing-index-item writing-loading">
+          <span class="writing-num">—</span>
+          <span class="writing-title-link">loading...</span>
         </li>
-
-        <li class="writing-index-item">
-          <span class="writing-num">02</span>
-          <a class="writing-title-link" href="#" target="_blank" rel="noopener noreferrer">english language paper</a>
-        </li>
-
-        <li class="writing-index-item">
-          <span class="writing-num">03</span>
-          <a class="writing-title-link" href="#" target="_blank" rel="noopener noreferrer">letter to an old friend</a>
-        </li>
-
-        <li class="writing-index-item">
-          <span class="writing-num">04</span>
-          <a class="writing-title-link" href="#" target="_blank" rel="noopener noreferrer">missed calls</a>
-        </li>
-
-        <li class="writing-index-item">
-          <span class="writing-num">05</span>
-          <a class="writing-title-link" href="#" target="_blank" rel="noopener noreferrer">The Prodigal Sun</a>
-        </li>
-
-        <li class="writing-index-item">
-          <span class="writing-num">06</span>
-          <a class="writing-title-link" href="#" target="_blank" rel="noopener noreferrer">somewhat hopeful letter</a>
-        </li>
-
-        <li class="writing-index-item">
-          <span class="writing-num">07</span>
-          <a class="writing-title-link" href="#" target="_blank" rel="noopener noreferrer">very angry letter pt. 2</a>
-        </li>
-
-        <li class="writing-index-item">
-          <span class="writing-num">08</span>
-          <a class="writing-title-link" href="#" target="_blank" rel="noopener noreferrer">some july night</a>
-        </li>
-
-        <li class="writing-index-item">
-          <span class="writing-num">09</span>
-          <a class="writing-title-link" href="#" target="_blank" rel="noopener noreferrer">clawed</a>
-        </li>
-
-        <li class="writing-index-item">
-          <span class="writing-num">10</span>
-          <a class="writing-title-link" href="#" target="_blank" rel="noopener noreferrer">so it is</a>
-        </li>
-
-        <li class="writing-index-item">
-          <span class="writing-num">11</span>
-          <a class="writing-title-link" href="#" target="_blank" rel="noopener noreferrer">see you</a>
-        </li>
-
       </ol>
 
       <p class="writing-substack">
@@ -99,5 +46,43 @@
   </main>
 
   <script src="script.js"></script>
+  <script>
+    (function () {
+      const PROJECT_ID = 'rfjpgwo0';
+      const DATASET = 'production';
+      const QUERY = encodeURIComponent(
+        '*[_type == "post"] | order(publishedAt desc) { title, slug, publishedAt, excerpt }'
+      );
+      const URL = `https://${PROJECT_ID}.apicdn.sanity.io/v2023-05-03/data/query/${DATASET}?query=${QUERY}`;
+
+      const list = document.getElementById('writing-list');
+
+      fetch(URL)
+        .then((res) => res.json())
+        .then((data) => {
+          const posts = data.result;
+          list.innerHTML = '';
+
+          if (!posts || posts.length === 0) {
+            list.innerHTML = '<li class="writing-index-item"><span class="writing-num">—</span><span class="writing-title-link">nothing here yet — come back soon.</span></li>';
+            return;
+          }
+
+          posts.forEach((post, i) => {
+            const num = String(i + 1).padStart(2, '0');
+            const li = document.createElement('li');
+            li.className = 'writing-index-item';
+            li.innerHTML = `
+              <span class="writing-num">${num}</span>
+              <a class="writing-title-link" href="post.html?slug=${post.slug.current}">${post.title}</a>
+            `;
+            list.appendChild(li);
+          });
+        })
+        .catch(() => {
+          list.innerHTML = '<li class="writing-index-item"><span class="writing-num">—</span><span class="writing-title-link">could not load posts. try again later.</span></li>';
+        });
+    })();
+  </script>
 </body>
 </html>

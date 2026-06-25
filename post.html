@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Post - sremyaar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .post-page {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 6rem;
+    }
+
+    .post-back {
+      display: inline-block;
+      font-family: var(--font-sans);
+      font-size: 0.85rem;
+      color: var(--cherry);
+      margin-bottom: 2.5rem;
+      letter-spacing: 0.02em;
+    }
+
+    .post-back:hover {
+      text-decoration: underline;
+    }
+
+    .post-meta {
+      font-family: var(--font-sans);
+      font-size: 0.8rem;
+      color: #888;
+      margin-bottom: 0.75rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .post-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--ink);
+      margin-bottom: 1rem;
+    }
+
+    .post-excerpt {
+      font-family: var(--font-sans);
+      font-size: 1.05rem;
+      color: #555;
+      margin-bottom: 2rem;
+      line-height: 1.7;
+    }
+
+    .post-cover {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      border-radius: 4px;
+      margin-bottom: 2.5rem;
+    }
+
+    .post-divider {
+      border: none;
+      border-top: 1px solid var(--divider);
+      margin: 2rem 0;
+    }
+
+    /* Body content */
+    .post-body {
+      font-family: var(--font-sans);
+      font-size: 1.05rem;
+      line-height: 1.85;
+      color: var(--ink);
+    }
+
+    .post-body p {
+      margin-bottom: 1.4em;
+    }
+
+    .post-body h2 {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 2.5rem 0 0.75rem;
+      color: var(--ink);
+    }
+
+    .post-body h3 {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin: 2rem 0 0.5rem;
+    }
+
+    .post-body h4 {
+      font-family: var(--font-sans);
+      font-size: 1rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin: 2rem 0 0.5rem;
+    }
+
+    .post-body blockquote {
+      border-left: 3px solid var(--cherry);
+      padding: 0.5rem 1.25rem;
+      margin: 1.5rem 0;
+      color: #555;
+      font-style: italic;
+    }
+
+    .post-body ul,
+    .post-body ol {
+      padding-left: 1.5rem;
+      margin-bottom: 1.4em;
+    }
+
+    .post-body li {
+      margin-bottom: 0.4em;
+    }
+
+    .post-body a {
+      color: var(--cherry);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .post-body figure {
+      margin: 2rem 0;
+    }
+
+    .post-body figure img {
+      width: 100%;
+      border-radius: 4px;
+    }
+
+    .post-body figure figcaption {
+      font-size: 0.82rem;
+      color: #888;
+      margin-top: 0.5rem;
+      text-align: center;
+    }
+
+    .post-categories {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .post-category-tag {
+      font-size: 0.75rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border: 1px solid var(--cherry);
+      color: var(--cherry);
+      padding: 0.2rem 0.6rem;
+      border-radius: 2px;
+    }
+
+    .post-loading,
+    .post-error {
+      font-family: var(--font-sans);
+      font-size: 1rem;
+      color: #888;
+      padding: 3rem 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVIGATION -->
+  <nav class="site-nav" aria-label="Main navigation">
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="work.html">Work</a></li>
+      <li><a href="writing.html">Writing</a></li>
+      <li><a href="connect.html">Connect</a></li>
+    </ul>
+  </nav>
+
+  <main class="page-content">
+    <div class="post-page" id="post-container">
+      <p class="post-loading">loading...</p>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+  <script>
+    (function () {
+      const PROJECT_ID = 'rfjpgwo0';
+      const DATASET = 'production';
+
+      function getSlug() {
+        return new URLSearchParams(window.location.search).get('slug');
+      }
+
+      function sanityImageUrl(ref) {
+        const match = ref.match(/^image-(.+)-(\d+x\d+)-(\w+)$/);
+        if (!match) return '';
+        return `https://cdn.sanity.io/images/${PROJECT_ID}/${DATASET}/${match[1]}-${match[2]}.${match[3]}`;
+      }
+
+      function renderBlock(block) {
+        if (block._type === 'image') {
+          const url = sanityImageUrl(block.asset._ref);
+          const alt = block.alt || '';
+          const caption = block.caption || '';
+          return `<figure><img src="${url}" alt="${alt}" loading="lazy" />${caption ? `<figcaption>${caption}</figcaption>` : ''}</figure>`;
+        }
+
+        if (block._type !== 'block') return '';
+
+        const children = block.children.map((child) => {
+          let text = child.text
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
+
+          if (child.marks && child.marks.length) {
+            child.marks.forEach((mark) => {
+              if (mark === 'strong') text = `<strong>${text}</strong>`;
+              else if (mark === 'em') text = `<em>${text}</em>`;
+              else if (mark === 'underline') text = `<u>${text}</u>`;
+              else if (mark === 'strike-through') text = `<s>${text}</s>`;
+            });
+          }
+          return text;
+        });
+
+        const content = children.join('');
+        const style = block.style || 'normal';
+        const listItem = block.listItem;
+
+        if (listItem) return `<li>${content}</li>`;
+        if (style === 'h2') return `<h2>${content}</h2>`;
+        if (style === 'h3') return `<h3>${content}</h3>`;
+        if (style === 'h4') return `<h4>${content}</h4>`;
+        if (style === 'blockquote') return `<blockquote><p>${content}</p></blockquote>`;
+        if (content === '') return '';
+        return `<p>${content}</p>`;
+      }
+
+      function renderPortableText(blocks) {
+        if (!blocks || !blocks.length) return '';
+        let html = '';
+        let listType = null;
+
+        blocks.forEach((block) => {
+          const isListItem = !!block.listItem;
+          const currentListType = block.listItem === 'bullet' ? 'ul' : 'ol';
+
+          if (isListItem && listType !== currentListType) {
+            if (listType) html += `</${listType}>`;
+            html += `<${currentListType}>`;
+            listType = currentListType;
+          } else if (!isListItem && listType) {
+            html += `</${listType}>`;
+            listType = null;
+          }
+
+          html += renderBlock(block);
+        });
+
+        if (listType) html += `</${listType}>`;
+        return html;
+      }
+
+      function formatDate(iso) {
+        if (!iso) return '';
+        return new Date(iso).toLocaleDateString('en-IN', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        });
+      }
+
+      function render(post) {
+        document.title = `${post.title} — sremyaar`;
+
+        const categories = post.categories && post.categories.length
+          ? `<div class="post-categories">${post.categories.map((c) => `<span class="post-category-tag">${c.title}</span>`).join('')}</div>`
+          : '';
+
+        const coverImage = post.mainImage && post.mainImage.asset
+          ? `<img class="post-cover" src="${sanityImageUrl(post.mainImage.asset._ref)}" alt="${post.mainImage.alt || post.title}" />`
+          : '';
+
+        const excerpt = post.excerpt
+          ? `<p class="post-excerpt">${post.excerpt}</p>`
+          : '';
+
+        const body = renderPortableText(post.body);
+
+        document.getElementById('post-container').innerHTML = `
+          <a class="post-back" href="writing.html">← back to writing</a>
+          <p class="post-meta">${formatDate(post.publishedAt)}</p>
+          <h1 class="post-title">${post.title}</h1>
+          ${excerpt}
+          ${categories}
+          ${coverImage}
+          ${coverImage || excerpt ? '<hr class="post-divider" />' : ''}
+          <div class="post-body">${body}</div>
+        `;
+      }
+
+      function renderError(msg) {
+        document.getElementById('post-container').innerHTML = `
+          <a class="post-back" href="writing.html">← back to writing</a>
+          <p class="post-error">${msg}</p>
+        `;
+      }
+
+      const slug = getSlug();
+      if (!slug) {
+        renderError('No post specified.');
+      } else {
+        const QUERY = encodeURIComponent(
+          `*[_type == "post" && slug.current == "${slug}"][0]{ title, slug, publishedAt, excerpt, mainImage{ asset, alt }, categories[]->{ title }, body }`
+        );
+        const URL = `https://${PROJECT_ID}.apicdn.sanity.io/v2023-05-03/data/query/${DATASET}?query=${QUERY}`;
+
+        fetch(URL)
+          .then((res) => res.json())
+          .then((data) => {
+            if (!data.result) {
+              renderError('Post not found.');
+            } else {
+              render(data.result);
+            }
+          })
+          .catch(() => renderError('Could not load post. Try again later.'));
+      }
+    })();
+  </script>
+</body>
+</html>
