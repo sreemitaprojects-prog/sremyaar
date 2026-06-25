@@ -29,14 +29,15 @@
     <div class="writing-page">
 
       <h1 class="page-title">writing</h1>
-      <p class="writing-subtitle">a collection of things written between seventeen and now</p>
+      <p class="writing-subtitle">written between then and now, but ask and i will never tell.</p>
 
-      <ol class="writing-index" id="writing-list">
-        <li class="writing-index-item writing-loading">
-          <span class="writing-num">—</span>
-          <span class="writing-title-link">loading...</span>
-        </li>
-      </ol>
+      <div class="writing-filter" id="writing-filter">
+        <button class="writing-filter-btn active" data-cat="">all</button>
+      </div>
+
+      <div class="writing-grid" id="writing-grid">
+        <div style="grid-column:1/-1;font-family:var(--font-sans);font-size:0.9rem;color:#999;padding:2rem 0;">loading...</div>
+      </div>
 
       <p class="writing-substack">
         I also write on <a href="#" target="_blank" rel="noopener noreferrer">Substack</a>.
@@ -48,39 +49,90 @@
   <script src="script.js"></script>
   <script>
     (function () {
-      const PROJECT_ID = 'rfjpgwo0';
-      const DATASET = 'production';
-      const QUERY = encodeURIComponent(
-        '*[_type == "post"] | order(publishedAt desc) { title, slug, publishedAt, excerpt }'
-      );
-      const URL = `https://${PROJECT_ID}.api.sanity.io/v2023-05-03/data/query/${DATASET}?query=${QUERY}`;
+      var PROJECT_ID = 'rfjpgwo0';
+      var DATASET    = 'production';
 
-      const list = document.getElementById('writing-list');
+      function apiUrl(query) {
+        return 'https://' + PROJECT_ID + '.api.sanity.io/v2023-05-03/data/query/' + DATASET + '?query=' + encodeURIComponent(query);
+      }
 
-      fetch(URL)
-        .then((res) => res.json())
-        .then((data) => {
-          const posts = data.result;
-          list.innerHTML = '';
+      function sanityImageUrl(ref, w, h) {
+        var match = ref.match(/^image-(.+)-(\d+x\d+)-(\w+)$/);
+        if (!match) return '';
+        var base = 'https://cdn.sanity.io/images/' + PROJECT_ID + '/' + DATASET + '/' + match[1] + '-' + match[2] + '.' + match[3];
+        return base + (w ? '?w=' + w + '&h=' + h + '&fit=crop&auto=format' : '');
+      }
 
-          if (!posts || posts.length === 0) {
-            list.innerHTML = '<li class="writing-index-item"><span class="writing-num">—</span><span class="writing-title-link">nothing here yet — come back soon.</span></li>';
-            return;
-          }
+      var allPosts = [];
+      var activeCategory = '';
 
-          posts.forEach((post, i) => {
-            const num = String(i + 1).padStart(2, '0');
-            const li = document.createElement('li');
-            li.className = 'writing-index-item';
-            li.innerHTML = `
-              <span class="writing-num">${num}</span>
-              <a class="writing-title-link" href="post.html?slug=${post.slug.current}">${post.title}</a>
-            `;
-            list.appendChild(li);
+      var grid   = document.getElementById('writing-grid');
+      var filter = document.getElementById('writing-filter');
+
+      function renderGrid(posts) {
+        if (!posts || posts.length === 0) {
+          grid.innerHTML = '<div style="grid-column:1/-1;font-family:var(--font-sans);font-size:0.9rem;color:#999;padding:2rem 0;">nothing here yet — come back soon.</div>';
+          return;
+        }
+        grid.innerHTML = posts.map(function (post) {
+          var slug    = post.slug.current;
+          var imgHtml = (post.mainImage && post.mainImage.asset && post.mainImage.asset._ref)
+            ? '<img src="' + sanityImageUrl(post.mainImage.asset._ref, 600, 600) + '" alt="' + post.title + '" loading="lazy" />'
+            : '';
+          var excerpt = post.excerpt ? '<p class="writing-card-excerpt">' + post.excerpt + '</p>' : '';
+          var cats    = (post.categories && post.categories.length)
+            ? '<div class="writing-card-cats">' + post.categories.map(function (c) { return '<span class="writing-card-cat">' + c.title + '</span>'; }).join('') + '</div>'
+            : '';
+          return '<a class="writing-card" href="post.html?slug=' + slug + '">'
+            + '<div class="writing-card-img">' + imgHtml + '</div>'
+            + '<div class="writing-card-body">'
+            + '<h2 class="writing-card-title">' + post.title + '</h2>'
+            + excerpt
+            + cats
+            + '</div></a>';
+        }).join('');
+      }
+
+      function applyFilter(cat) {
+        activeCategory = cat;
+        filter.querySelectorAll('.writing-filter-btn').forEach(function (btn) {
+          btn.classList.toggle('active', btn.dataset.cat === cat);
+        });
+        var filtered = cat
+          ? allPosts.filter(function (p) {
+              return p.categories && p.categories.some(function (c) { return c.title === cat; });
+            })
+          : allPosts;
+        renderGrid(filtered);
+      }
+
+      filter.addEventListener('click', function (e) {
+        var btn = e.target.closest('.writing-filter-btn');
+        if (!btn) return;
+        applyFilter(btn.dataset.cat);
+      });
+
+      var catQuery  = '*[_type == "category"] | order(title asc) { title }';
+      var postQuery = '*[_type == "post"] | order(publishedAt desc) { title, slug, publishedAt, excerpt, mainImage{ asset }, categories[]->{ title } }';
+
+      Promise.all([fetch(apiUrl(catQuery)).then(function (r) { return r.json(); }), fetch(apiUrl(postQuery)).then(function (r) { return r.json(); })])
+        .then(function (results) {
+          var cats  = results[0].result || [];
+          var posts = results[1].result || [];
+
+          cats.forEach(function (cat) {
+            var btn = document.createElement('button');
+            btn.className = 'writing-filter-btn';
+            btn.dataset.cat = cat.title;
+            btn.textContent = cat.title;
+            filter.appendChild(btn);
           });
+
+          allPosts = posts;
+          renderGrid(posts);
         })
-        .catch(() => {
-          list.innerHTML = '<li class="writing-index-item"><span class="writing-num">—</span><span class="writing-title-link">could not load posts. try again later.</span></li>';
+        .catch(function () {
+          grid.innerHTML = '<div style="grid-column:1/-1;font-family:var(--font-sans);font-size:0.9rem;color:#999;padding:2rem 0;">could not load posts. try again later.</div>';
         });
     })();
   </script>

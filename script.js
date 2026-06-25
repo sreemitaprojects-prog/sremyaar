@@ -31,7 +31,7 @@
    ============================================================ */
 (function initCarousels() {
   var carousels = document.querySelectorAll(
-    '.work-carousel, .about-carousel, .work-project-carousel'
+    '.work-carousel, .about-carousel, .work-project-carousel, .lp-about-carousel-wrap'
   );
   if (!carousels.length) return;
 

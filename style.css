@@ -884,6 +884,256 @@ img {
 }
 
 /* ============================================================
+   MARQUEE STRIP
+   ============================================================ */
+.marquee-strip {
+  background-color: var(--cherry);
+  overflow: hidden;
+  padding: 11px 0;
+  white-space: nowrap;
+}
+
+.marquee-track {
+  display: inline-block;
+  will-change: transform;
+  animation: marquee-scroll 22s linear infinite;
+}
+
+.marquee-track span {
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #fff;
+  padding: 0 52px;
+}
+
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ============================================================
+   WRITING GRID + FILTER
+   ============================================================ */
+.writing-page {
+  max-width: 860px;
+}
+
+.writing-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 40px;
+}
+
+.writing-filter-btn {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  background: none;
+  border: 1px solid var(--divider);
+  color: var(--ink);
+  padding: 5px 16px;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s, background-color 0.15s;
+}
+
+.writing-filter-btn:hover {
+  border-color: var(--cherry);
+  color: var(--cherry);
+}
+
+.writing-filter-btn.active {
+  background-color: var(--cherry);
+  border-color: var(--cherry);
+  color: #fff;
+}
+
+.writing-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  margin-bottom: 64px;
+}
+
+.writing-card {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid var(--divider);
+  color: var(--ink);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.writing-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.07);
+}
+
+.writing-card-img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background-color: var(--cherry-light);
+  flex-shrink: 0;
+}
+
+.writing-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.writing-card:hover .writing-card-img img {
+  transform: scale(1.04);
+}
+
+.writing-card-body {
+  padding: 16px 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  flex: 1;
+}
+
+.writing-card-title {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.35;
+  color: var(--ink);
+}
+
+.writing-card-excerpt {
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  color: #666;
+  line-height: 1.6;
+  flex: 1;
+}
+
+.writing-card-cats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 6px;
+}
+
+.writing-card-cat {
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  letter-spacing: 0.05em;
+  text-transform: lowercase;
+  color: var(--cherry);
+  border: 1px solid var(--cherry-light);
+  padding: 2px 8px;
+}
+
+/* ============================================================
+   LANDING PAGE — WORK PANELS
+   ============================================================ */
+.lp-work-panels {
+  margin-bottom: 28px;
+}
+
+.lp-work-panel {
+  display: flex;
+  flex-direction: column;
+  padding: 26px 32px;
+  gap: 8px;
+  transition: opacity 0.15s;
+}
+
+.lp-work-panel:hover {
+  opacity: 0.87;
+}
+
+.lp-work-panel:hover .lp-panel-arrow {
+  transform: translateX(4px);
+}
+
+.lp-work-panel--red {
+  background-color: var(--cherry);
+  color: #fff;
+}
+
+.lp-work-panel--white {
+  background-color: #fff;
+  color: var(--ink);
+  border: 1px solid var(--divider);
+  border-top: none;
+}
+
+.lp-panel-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.lp-panel-num {
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  opacity: 0.55;
+}
+
+.lp-panel-name {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 400;
+  flex: 1;
+}
+
+.lp-panel-arrow {
+  font-size: 1rem;
+  transition: transform 0.15s;
+}
+
+.lp-panel-desc {
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  line-height: 1.55;
+  opacity: 0.7;
+}
+
+/* ============================================================
+   LANDING PAGE — ABOUT WITH CAROUSEL
+   ============================================================ */
+.lp-about-inner {
+  display: flex;
+  align-items: center;
+  gap: 52px;
+  max-width: 860px;
+}
+
+.lp-about-text {
+  flex: 1;
+}
+
+.lp-about-carousel-wrap {
+  width: 155px;
+  flex-shrink: 0;
+}
+
+.lp-about-carousel-wrap .carousel-viewport {
+  width: 155px;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  border: 1px solid var(--divider);
+}
+
+.lp-about-carousel-wrap .carousel-ui {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+/* ============================================================
    RESPONSIVE
    ============================================================ */
 @media (max-width: 640px) {
@@ -991,5 +1241,30 @@ img {
 
   .lp-about {
     padding: 52px 0;
+  }
+
+  .writing-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .writing-page {
+    max-width: 100%;
+  }
+
+  .lp-about-inner {
+    flex-direction: column-reverse;
+    gap: 28px;
+  }
+
+  .lp-about-carousel-wrap {
+    width: 120px;
+  }
+
+  .lp-about-carousel-wrap .carousel-viewport {
+    width: 120px;
+  }
+
+  .lp-work-panel {
+    padding: 20px 20px;
   }
 }
